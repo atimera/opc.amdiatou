@@ -3,6 +3,8 @@ package com.ocr.anthony;
 import java.util.Scanner;
 
 public class Order {
+    Scanner sc = new Scanner(System.in);
+
     /**
      * Display all available menus in the restaurant.
      */
@@ -11,7 +13,7 @@ public class Order {
         System.out.println("1 - poulet");
         System.out.println("2 - Boeuf");
         System.out.println("3 - Végétatien");
-        System.out.println("4 - Poisson");
+//        System.out.println("4 - Poisson");
         System.out.println("Que souhaitez-vous comme menu ?");
     }
     /**
@@ -25,9 +27,11 @@ public class Order {
             System.out.println("Vous avez choisi comme menu : boeuf");
         }else if(nbMenu == 3){
             System.out.println("Vous avez choisi comme menu : végétarien");
-        }else if (nbMenu == 4){
+        }
+        /*else if (nbMenu == 4){
             System.out.println("Vous avez choisi comme menu : poisson");
-        }else {
+        }*/
+        else {
             System.out.println("Vous n'avez pas choisi de menu parmi les choix proposés");
         }
     }
@@ -35,11 +39,48 @@ public class Order {
     /**
      * Run asking process for a menu.
      */
-    public void runMenu(){
+    public void runMenu() {
         this.displayAvailableMenu();
-        Scanner sc = new Scanner(System.in);
-        int nb = sc.nextInt();
-        this.displaySelectedMenu(nb);
+        int nbMenu;
+        do {
+            nbMenu = sc.nextInt();
+            this.displaySelectedMenu(nbMenu);
+            switch (nbMenu) {
+                case 1:
+                    displayAvailableSide(true);
+                    int nbSide;
+                    do {
+                        nbSide = sc.nextInt();
+                        displaySelectedSide(nbSide, true);
+                    } while (nbSide < 1 || nbSide > 3);
+                    displayAvailableDrink();
+                    int nbDrink;
+                    do {
+                        nbDrink = sc.nextInt();
+                        displaySelectedDrink(nbDrink);
+                    } while (nbDrink < 1 || nbDrink > 3);
+                    break;
+                case 2:
+                    displayAvailableSide(true);
+                    do {
+                        nbSide = sc.nextInt();
+                        displaySelectedSide(nbSide, true);
+                    } while (nbSide < 1 || nbSide > 3);
+                    break;
+                case 3:
+                    displayAvailableSide(false);
+                    do {
+                        nbSide = sc.nextInt();
+                        displaySelectedSide(nbSide, false);
+                    } while (nbSide < 1 || nbSide > 2);
+                    displayAvailableDrink();
+                    do {
+                        nbDrink = sc.nextInt();
+                        displaySelectedDrink(nbDrink);
+                    } while (nbDrink < 1 || nbDrink > 3);
+                    break;
+            }
+        } while (nbMenu < 1 || nbMenu > 3);
     }
 
     /**
@@ -97,12 +138,57 @@ public class Order {
             case 3:
                 System.out.println("Vous avez choisi comme boisson : soda");
                 break;
-            case 4:
+/*            case 4:
                 System.out.println("Vous avez choisi comme boisson : jus de fruit");
-                break;
+                break;*/
             default:
                 System.out.println("Vous n'avez pas choisi de boisson parmi les choix proposés");
                 break;
+        }
+    }
+
+    /**
+     * Display all available sides depending on all sides enable or not.
+     * All sides = vegetables, frites and rice
+     * No all sides = rice or not
+     *
+     * @param allSideEnable enable display for all side or not
+     */
+    public void displayAvailableSide(boolean allSideEnable) {
+        System.out.println("Choix accompagnement");
+        if (allSideEnable) {
+            System.out.println("1 - légumes frais");
+            System.out.println("2 - frites");
+            System.out.println("3 - riz");
+        } else {
+            System.out.println("1 - riz");
+            System.out.println("2 - pas de riz");
+        }
+        System.out.println("Que souhaitez-vous comme accompagnement ?");
+    }
+
+    /**
+     * Display all available drinks in the restaurant
+     */
+    public void displayAvailableDrink() {
+        System.out.println("Choix boisson");
+        System.out.println("1 - eau plate");
+        System.out.println("2 - eau gazeuse");
+        System.out.println("3 - soda");
+//        System.out.println("4 - jus de fruit");
+        System.out.println("Que souhaitez-vous comme boisson ?");
+    }
+
+    /**
+     * Run asking process for several menus.
+     */
+    public void runMenus() {
+        System.out.println("Combien souhaitez vous commander de menu ?");
+        int menuQuantity = sc.nextInt();
+        int counter = 0;
+        while (counter < menuQuantity) {
+            runMenu();
+            counter = counter + 1;
         }
     }
 }
